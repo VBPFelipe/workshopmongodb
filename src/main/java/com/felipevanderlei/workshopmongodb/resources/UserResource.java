@@ -2,9 +2,8 @@ package com.felipevanderlei.workshopmongodb.resources;
 
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.felipevanderlei.workshopmongodb.domain.User;
+import com.felipevanderlei.workshopmongodb.dto.UserDTO;
 import com.felipevanderlei.workshopmongodb.services.UserService;
 
 @RestController
@@ -24,7 +24,7 @@ public class UserResource {
 	
 	//@RequestMapping(method=RequestMethod.GET)
 	@GetMapping
-	public ResponseEntity<List<User>> findAll(){
+	public ResponseEntity<List<UserDTO>> findAll(){
 		//User maria = new User("1", "Maria Brown", "maria@gmail.com");
 		//User alex = new User("2", "Alex Green", "alex@gmail.com");
 		
@@ -39,6 +39,7 @@ public class UserResource {
 		//list.addAll(Arrays.asList(maria, alex));
 		
 		List<User> list = service.findAll();
-		return ResponseEntity.ok().body(list);
+		List<UserDTO> listDTO = list.stream().map(x -> new UserDTO(x)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDTO);
 	}
 }
